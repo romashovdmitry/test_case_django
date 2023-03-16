@@ -1,0 +1,9 @@
+# python files
+__pycache__
+*.pyc
+
+# CSV-files
+*.csv
+
+# for tests on local
+typical_commands.txt
