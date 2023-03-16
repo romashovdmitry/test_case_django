@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+    django:
+        build: .
+        container_name: django_test_case
+        command: > 
+            sh -c "python manage.py makemigrations test_case &&
+                   python manage.py migrate &&
+                   python manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - .:/usr/src/app
+        ports: 
+            - "8000:8000"
+        depends_on:
+            - test_case
+    test_case:
+        image: postgres
+        container_name: test
+        environment:
+        - POSTGRES_DB=test_case
+        - POSTGRES_USER=test_caser
+        - POSTGRES_PASSWORD=test_case_password
+        expose:
+          - '5432'
+        ports:
+          - '5432:5432'
