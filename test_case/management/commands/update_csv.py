@@ -72,13 +72,6 @@ class Command(BaseCommand):
 
         csv_names = create_csv_helper()
 
-#        csv_names = [
-#            'ABC-3xx.csv',
-#            'ABC-4xx.csv',
-#            'ABC-8xx.csv',
-#            'DEF-9xx.csv'
-#        ]
-
         for csv_name in csv_names:
 
             bulk_list = []
@@ -88,8 +81,6 @@ class Command(BaseCommand):
                 sep=';',
                 usecols=['АВС/ DEF', 'От', 'До', 'Оператор', 'Регион']
             )
-
-            print(csv_name)
 
             step = 5000
 
