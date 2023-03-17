@@ -90,8 +90,6 @@ class Command(BaseCommand):
             )
 
             print(csv_name)
-            if dp:
-                print(True)
 
             step = 5000
 
