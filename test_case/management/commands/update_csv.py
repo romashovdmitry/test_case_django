@@ -62,7 +62,7 @@ def create_csv_helper() -> list:
     os_list = os.listdir(os.getcwd())
     for os_file in os_list:
         if '.csv' in os_file:
-            csv_names.appen(os_file)
+            csv_names.append(os_file)
     return csv_names
 
 
@@ -71,6 +71,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         csv_names = create_csv_helper()
+
+#        csv_names = [
+#            'ABC-3xx.csv',
+#            'ABC-4xx.csv',
+#            'ABC-8xx.csv',
+#            'DEF-9xx.csv'
+#        ]
 
         for csv_name in csv_names:
 
@@ -81,6 +88,10 @@ class Command(BaseCommand):
                 sep=';',
                 usecols=['АВС/ DEF', 'От', 'До', 'Оператор', 'Регион']
             )
+
+            print(csv_name)
+            if dp:
+                print(True)
 
             step = 5000
 
