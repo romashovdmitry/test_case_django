@@ -1,6 +1,8 @@
 # Project
 Test task for ATrucks by Python Backend Developer Romashov Dmitry
 
+ScreenCast of working project: [Youtube](https://www.youtube.com/watch?v=Xb0zw3j_QeA)
+
 ## Stack of technologies: 
 - Django, Django ORM
 - pandas for reading CSV
