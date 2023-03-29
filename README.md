@@ -1,6 +1,8 @@
 # Project
 Test task for ATrucks by Python Backend Developer Romashov Dmitry
 
+##### Project works only from territory of Russian Federation because of using Russian goverment site. Or you can use VPN, proxy, etc.
+
 ScreenCast of working project: [Youtube](https://www.youtube.com/watch?v=Xb0zw3j_QeA)
 
 # Value
@@ -9,6 +11,7 @@ The application determines the region and operator for the phone number based on
 
 ## Stack of technologies: 
 - Django, Django ORM
+- SQLAlchemy for more complicated and faster transactions
 - pandas for reading CSV
 - requests for download CSV
 - beautifulsoup for searching CSV in DOM
