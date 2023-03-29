@@ -2,6 +2,10 @@ Django == 4.1
 psycopg2==2.9.3
 django-reset-migrations==0.4.0
 requests==2.27.1
-djangorestframework==3.14.
+djangorestframework==3.14
 beautifulsoup4==4.11.2
 pandas==1.5.3
+lxml==4.9
+SQLAlchemy==1.4.40
+python-dotenv==1.0.0
+django-betterforms==2.0.0

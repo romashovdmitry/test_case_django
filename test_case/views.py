@@ -3,12 +3,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 # import model and form
-from .models import CSV
+from .models import CSV, Operator, Region
 from .form import PhoneNumber
 
 # for fun on interface
 from test_case.settings import GROSEV_IS_ANGRY, GROSEV_IS_WAITING, KUDRYAVZEV
 
+# import SQL transactions by cursor
+from test_case.transactions import SQLTransactions
 
 # to avoid resubmit form on reload page
 def start_page(request):
@@ -32,19 +34,25 @@ def search(request):
     if request.method == 'POST':
         phone_number_ = request.POST['phone_number']
         if len(phone_number_) == 10:
-            city_code = phone_number_[:3]
+            city_code = int(phone_number_[:3])
             phone_number = int(phone_number_[3:])
-            if CSV.objects.filter(city_code=city_code).exists():
-                csv_rows = CSV.objects.filter(city_code=city_code).all()
-                for row in csv_rows:
-                    if row.start == phone_number or\
-                        row.finish == phone_number or\
-                            row.start < phone_number < row.finish:
-                        messages.info(request, f'Номер: {phone_number_}')
-                        messages.info(request, f'Регион: {row.geo}')
-                        messages.info(request, f'Оператор: {row.operator}')
-                        request.session['status'] = 'info'
-                        return redirect('start_page')
+            db_return = SQLTransactions(
+                city_code=city_code,
+                number=phone_number
+            )
+            if Region.objects.filter(city_code=city_code).exists():
+                db_return = SQLTransactions(
+                    city_code=city_code,
+                    number=phone_number
+                ).search_data()
+                if db_return is not None:
+                    operator = db_return['operator']
+                    region = db_return['geo']
+                    messages.info(request, f'Номер: {phone_number_}')
+                    messages.info(request, f'Оператор: {operator}')
+                    messages.info(request, f'Регион: {region}')
+                    request.session['status'] = 'info'
+                    return redirect('start_page')
                 messages.warning(request, 'Нам неизвестен такой номер!')
                 request.session['status'] = 'warning'
                 return redirect('start_page')

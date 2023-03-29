@@ -1,6 +1,6 @@
 from rest_framework.generics import RetrieveAPIView
 from django.shortcuts import render
-from test_case.models import CSV
+#from test_case.models import CSV
 from test_case.api.serializers import CSVSerializer
 from django.forms import model_to_dict
 
