@@ -3,6 +3,10 @@ Test task for ATrucks by Python Backend Developer Romashov Dmitry
 
 ScreenCast of working project: [Youtube](https://www.youtube.com/watch?v=Xb0zw3j_QeA)
 
+# Value
+
+The application determines the region and operator for the phone number based on government public data.
+
 ## Stack of technologies: 
 - Django, Django ORM
 - pandas for reading CSV
