@@ -12,7 +12,6 @@ import re
 import pandas
 import os
 
-
 # import SQL transactions by cursor
 from test_case.transactions import SQLTransactions
 
