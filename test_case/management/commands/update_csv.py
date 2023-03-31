@@ -12,8 +12,69 @@ import re
 import pandas
 import os
 
+import ssl 
+import certifi from urllib.request 
+import urlopen 
+
+request = "https://nd-123-456-789.p2pify.com/901c7d18b72538fd3324248e1234" 
+urlopen(request, context=ssl.create_default_context(cafile=certifi.where()))
+
+
 # import SQL transactions by cursor
 from test_case.transactions import SQLTransactions
+
+def download_csv_helper() -> None:
+
+    url = 'https://opendata.digital.gov.ru/registry/numeric/downloads/'
+
+    # eroor with reqeust resolving
+    # https://stackoverflow.com/questions/27981545/suppress-insecurerequestwarning-unverified-https-request-is-being-made-in-pytho
+    requests.packages.urllib3.disable_warnings()
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    requests.packages.urllib3.disable_warnings(
+        requests.packages.urllib3.exceptions.InsecureRequestWarning)
+
+    # get DOM of page
+    page = requests.get(url=url, verify=False)
+
+    # get list of <a> tags from DOM
+    soup = BeautifulSoup(page.text, "html.parser")
+    soup = soup.find_all('a')
+
+    for link in soup:
+
+        if link.get('class') == ['text-primary-500', 'hover:text-primary-600']:
+
+            csv_name = link.get('href')
+            csv_name = csv_name.replace(
+                'https://opendata.digital.gov.ru/downloads/', '')
+            csv_name = re.sub(r'\?\S+', '', csv_name)
+
+            csv_obj = requests.get(url=link.get('href'), verify=False)
+            open(f'{csv_name}', 'wb').write(csv_obj.content)
+
+
+def create_csv_helper() -> list:
+
+    csv_names = []
+
+    # delete all CSV from local
+    os_list = os.listdir(os.getcwd())
+    for os_file in os_list:
+        if '.csv' in os_file:
+            os.remove(os_file)
+    # clean DB
+    SQLTransactions().delete_all_data()
+
+    # download CSV
+    download_csv_helper()
+
+    # get names of downloaded CSV
+    os_list = os.listdir(os.getcwd())
+    for os_file in os_list:
+        if '.csv' in os_file:
+            csv_names.append(os_file)
+    return csv_names
 
 
 def insert_phone_number(pandas_obj):
@@ -104,6 +165,25 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        csv_names = create_csv_helper()            
+
+        for csv_name in csv_names:
+
+            pandas_obj = pandas.read_csv(
+                csv_name,
+                sep=';',
+                usecols=['АВС/ DEF', 'От', 'До', 'Оператор', 'Регион']
+            )
+
+            insert_region(pandas_obj)
+            insert_operator(pandas_obj)
+            insert_phone_number(pandas_obj)
+
+
+'''
+
+CSV - file on site could be readen by pandas, but now, in version bellow where is SSL error. 
+
         SQLTransactions().delete_all_data()
 
         url = 'https://opendata.digital.gov.ru/registry/numeric/downloads/'
@@ -132,7 +212,4 @@ class Command(BaseCommand):
                     sep=';',
                     usecols=['АВС/ DEF', 'От', 'До', 'Оператор', 'Регион']
                 )
-
-                insert_region(pandas_obj)
-                insert_operator(pandas_obj)
-                insert_phone_number(pandas_obj)
+'''
