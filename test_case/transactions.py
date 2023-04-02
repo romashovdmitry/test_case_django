@@ -12,6 +12,7 @@ class SQLTransactions():
     host = os.getenv('DB_HOST')
     user = os.getenv('DB_USER')
 
+    # create connection
     db = create_engine(
         f'postgresql://{user}:{password}@{host}:5432/{name}')
     conn = db.connect()
@@ -25,10 +26,10 @@ class SQLTransactions():
 
         return (
             self.db.execute(
-                "SELECT region.geo, operator "
+                "SELECT region.geo, operator, id "
                 "FROM phone_number "
                 "JOIN region "
-                "ON phone_number.region_pk=region.region_pk "
+                "ON phone_number.region_fk=region.region_pk "
                 f"AND region.city_code={self.city_code} "
                 "AND ("
                 f"(start={self.number} OR finish={self.number})"

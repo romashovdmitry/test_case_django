@@ -12,9 +12,9 @@ import re
 import pandas
 import os
 
-
 # import SQL transactions by cursor
 from test_case.transactions import SQLTransactions
+
 
 def download_csv_helper() -> None:
 
@@ -52,15 +52,16 @@ def create_csv_helper() -> list:
     csv_names = []
 
     # delete all CSV from local
-    os_list = os.listdir(os.getcwd())
-    for os_file in os_list:
-        if '.csv' in os_file:
-            os.remove(os_file)
+#    os_list = os.listdir(os.getcwd())
+#    for os_file in os_list:
+#        if '.csv' in os_file:
+#            os.remove(os_file)
+
     # clean DB
     SQLTransactions().delete_all_data()
 
     # download CSV
-    download_csv_helper()
+#    download_csv_helper()
 
     # get names of downloaded CSV
     os_list = os.listdir(os.getcwd())
@@ -78,14 +79,14 @@ def insert_phone_number(pandas_obj):
 
     for index, row in pandas_obj.iterrows():
         if index < (step-1):
-            region_pk = Region.objects.filter(geo=row.Регион).filter(
+            region_fk = Region.objects.filter(geo=row.Регион).filter(
                 city_code=row['АВС/ DEF']).first()
             operator = Operator.objects.get(operator=row.Оператор)
             bulk_list.append(
                 PhoneNumber(
                     start=row.От,
                     finish=row.До,
-                    region_pk=region_pk,
+                    region=region_fk,
                     operator=operator
                 )
             )
@@ -158,7 +159,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        csv_names = create_csv_helper()            
+        csv_names = create_csv_helper()
 
         for csv_name in csv_names:
 
