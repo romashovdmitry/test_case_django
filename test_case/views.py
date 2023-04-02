@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 
 # import model and form
-from .models import CSV, Operator, Region
+from .models import Operator, Region
 from .form import PhoneNumber
 
 # for fun on interface

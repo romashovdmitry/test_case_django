@@ -1,6 +1,6 @@
 # Django packages
 from django.db.models import Model, SmallIntegerField, BigIntegerField, \
-    CharField, UUIDField, ForeignKey, TextField, CASCADE
+    CharField, UUIDField, ForeignKey, CASCADE
 
 # import for uuid_pk
 import uuid
@@ -11,7 +11,7 @@ class Region(Model):
     class Meta:
         db_table = 'region'
 
-    region_pk = UUIDField(
+    region = UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         db_column='region_pk'
@@ -64,10 +64,10 @@ class PhoneNumber(Model):
         db_column='operator'
     )
 
-    region_pk = ForeignKey(
+    region = ForeignKey(
         Region,
-        to_field='region_pk',
+        to_field='region',
         on_delete=CASCADE,
-        db_column='region_pk'
+        db_column='region_fk'
     )
 
